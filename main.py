@@ -1,7 +1,5 @@
 from tkinter import *
 from tkinter import filedialog
-from encryptor import encrypt
-from decryptor import decrypt
 from doc_class import document
 
 
@@ -13,6 +11,14 @@ sys.stdout.write = redirector
 
 
 class UI:
+    def dec(self):
+        doc = document(self.inputfile, self.outputfile.get())
+        doc.decrypt()
+
+    def enc(self):
+        doc = document(self.inputfile, self.outputfile.get())
+        doc.encrypt()
+
     def __init__(self, master):
         self.topframe = Frame(master, bg="#2f2f2f", pady=5)
         self.topframe.pack(expand=TRUE, side=TOP, fill=BOTH)
@@ -26,10 +32,12 @@ class UI:
         self.outputfile = Entry(self.middleframe, justify=LEFT)
         self.botframe = Frame(master, bg="#2a2a2a")
         self.botframe.pack(expand=TRUE, side=BOTTOM, fill=BOTH)
-        self.select_enc = Button(self.botframe, text="Encrypt", relief=RAISED,
-                                 command=self.enc())
-        self.select_dec = Button(self.botframe, text="Decrypt", relief=RAISED,
-                                 command=self.dec)
+        self.select_enc = Button(self.botframe, text="Encrypt", relief=SUNKEN, bg="#777777", activebackground="#898989",
+                                 bd=1, command=self.enc)
+        self.select_dec = Button(self.botframe, text="Decrypt", relief=SUNKEN, bg="#777777", activebackground="#898989",
+                                 bd=1, command=self.dec)
+        self.select_dec.config(highlightthickness=0, highlightbackground="#777777")
+        self.select_enc.config(highlightthickness=0, highlightbackground="#777777")
 
         self.browse.pack(side=TOP)
         self.show_inputfile.pack(fill=Y, side=TOP)
@@ -43,17 +51,12 @@ class UI:
         self.inputfile = filedialog.askopenfilename(title='Browse', filetypes=[("Text files", "*.txt")])
         self.show_inputfile.configure(text=self.inputfile)
 
-    def dec(self):
-        decrypt(self.inputfile, self.outputfile.get())
-
-    def enc(self):
-        encrypt(self.inputfile, self.outputfile.get())
-
 
 root = Tk()
 root.title("Encryptor/Decryptor")
-gui_print = Text(root)
+gui_print = Text(root, bg="#353535", fg="#bbbbbb")
 gui_print.pack(side=BOTTOM, fill=BOTH)
+gui_print.config(highlightthickness=0)
 
 window = UI(root)
 
