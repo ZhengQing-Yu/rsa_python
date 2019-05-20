@@ -31,9 +31,6 @@ class UI:
         self.select_dec = Button(self.botframe, text="Decrypt", relief=RAISED,
                                  command=self.dec)
 
-        self.test = Button(self.topframe, command=self.print1)
-        self.test.pack()
-
         self.browse.pack(side=TOP)
         self.show_inputfile.pack(fill=Y, side=TOP)
         self.output_prompt.grid(row=1, column=1, padx=15, pady=5, sticky=W+E)
@@ -45,11 +42,6 @@ class UI:
     def read_filename(self):
         self.inputfile = filedialog.askopenfilename(title='Browse', filetypes=[("Text files", "*.txt")])
         self.show_inputfile.configure(text=self.inputfile)
-
-    def print1(self):
-        print(self.inputfile)
-        print(self.outputfile.get())
-        print(self.inputfile + ' concatenated with ' + self.outputfile.get())
 
     def dec(self):
         decrypt(self.inputfile, self.outputfile.get())
