@@ -4,7 +4,9 @@ from doc_class import document
 
 
 def redirector(inputStr):
+    gui_print.configure(state='normal')
     gui_print.insert(INSERT, inputStr)
+    gui_print.configure(state='disabled')
 
 
 sys.stdout.write = redirector
@@ -54,7 +56,7 @@ class UI:
 
 root = Tk()
 root.title("Encryptor/Decryptor")
-gui_print = Text(root, bg="#353535", fg="#bbbbbb")
+gui_print = Text(root, state='disabled', bg="#353535", fg="#bbbbbb")
 gui_print.pack(side=BOTTOM, fill=BOTH)
 gui_print.config(highlightthickness=0)
 
