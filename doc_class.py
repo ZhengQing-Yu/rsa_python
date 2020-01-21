@@ -1,5 +1,7 @@
-from encryptor import encrypt
+from encryptor import encrypt_file
 from decryptor import decrypt
+from encryptor import public_key_message
+from decryptor import private_key_message
 import os
 
 
@@ -22,12 +24,19 @@ class document:
         if self.writefile == "":
             readfile = os.path.splitext(self.readfile)
             self.writefile = readfile[0] + '_decrypted' + readfile[1]
-        decrypt(self.readfile, self.writefile)
-        print("Your decrypted file can be found in", self.writefile)
+        try:
+            decrypt(self.readfile, self.writefile, private_key_message)
+        except IOError:
+            raise
+        except ValueError:
+            raise
 
     def encrypt(self):
         if self.writefile == "":
             readfile = os.path.splitext(self.readfile)
             self.writefile = readfile[0] + '_encrypted' + readfile[1]
-        encrypt(self.readfile, self.writefile)
-        print("Your encrypted file can be found in", self.writefile)
+        try:
+            encrypt_file(self.readfile, self.writefile, public_key_message)
+            return self.writefile
+        except IOError:
+            raise

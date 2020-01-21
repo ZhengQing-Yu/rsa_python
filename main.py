@@ -1,23 +1,33 @@
 from tkinter import *
 from tkinter import filedialog
 from doc_class import document
+import sys
 
 
-def redirector(inputStr):
-    gui_print.configure(state='normal')
-    gui_print.insert(INSERT, inputStr)
-    gui_print.configure(state='disabled')
+class Redirector:
+    def __init__(self, textbox):
+        self.textbox = textbox
 
+    def write(self, input):
+        self.textbox.configure(state='normal')
+        self.textbox.insert(INSERT, input)
+        self.textbox.configure(state='disabled')
 
-sys.stdout.write = redirector
+    def flush(self):
+        pass
 
 
 class UI:
-    def dec(self):
-        doc = document(self.inputfile, self.outputfile.get())
-        doc.decrypt()
+    def decrypt(self):
+        try:
+            doc = document(self.inputfile, self.outputfile.get())
+            doc.decrypt()
+        except IOError:
+            print("Cannot open file")
+        except ValueError:
+            print("Cannot decrypt")
 
-    def enc(self):
+    def encrypt(self):
         doc = document(self.inputfile, self.outputfile.get())
         doc.encrypt()
 
@@ -26,8 +36,8 @@ class UI:
         self.topframe.pack(expand=TRUE, side=TOP, fill=BOTH)
         self.inputfile = ""
         self.show_inputfile = Label(self.topframe, text="No input file", bg="#2f2f2f", fg="#7e7e7e", pady=5)
-        self.browse = Button(self.topframe, text='Browse', activebackground="#717171", bg="#1d1d1d", fg="#d0d0d0",
-                             bd=1, command=self.read_filename)
+        self.browse = Button(self.topframe, text='Browse', activebackground="#717171", bg="#1d1d1d", fg="#d0d0d0", bd=1,
+                             command=self.read_filename)
         self.middleframe = Frame(master, bg="#505050")
         self.middleframe.pack(expand=TRUE, side=TOP, fill=BOTH)
         self.output_prompt = Label(self.middleframe, text="Save output as:", bg="#505050", fg="#bfbfbf")
@@ -35,9 +45,9 @@ class UI:
         self.botframe = Frame(master, bg="#2a2a2a")
         self.botframe.pack(expand=TRUE, side=BOTTOM, fill=BOTH)
         self.select_enc = Button(self.botframe, text="Encrypt", relief=SUNKEN, bg="#777777", activebackground="#898989",
-                                 bd=1, command=self.enc)
+                                 bd=1, command=self.encrypt)
         self.select_dec = Button(self.botframe, text="Decrypt", relief=SUNKEN, bg="#777777", activebackground="#898989",
-                                 bd=1, command=self.dec)
+                                 bd=1, command=self.decrypt)
         self.select_dec.config(highlightthickness=0, highlightbackground="#777777")
         self.select_enc.config(highlightthickness=0, highlightbackground="#777777")
 
@@ -59,6 +69,8 @@ root.title("Encryptor/Decryptor")
 gui_print = Text(root, state='disabled', bg="#353535", fg="#bbbbbb")
 gui_print.pack(side=BOTTOM, fill=BOTH)
 gui_print.config(highlightthickness=0)
+
+sys.stdout = Redirector(gui_print)
 
 window = UI(root)
 

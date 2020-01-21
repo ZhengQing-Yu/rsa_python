@@ -24,7 +24,5 @@ def decode(string_b64):
 	return n
 
 
-print(alphabet_b64)
-
 for x in [random.randint(100000000000000000000, 1000000000000000000000000) for x in range(100000)]:
 	assert decode(encode(x)) == x
