@@ -1,12 +1,13 @@
-# computes a^n mod m using the divide and multiply algorithm
-def mod_power(a, n, m):
-    n_binary = "{0:b}".format(n)
+# computes base^exponent mod modulo using the divide and multiply algorithm
+def mod_power(base, exponent, modulo):
     x = 1
-    exp_counter = a % m
-    for i in range(len(n_binary)):
-        if int(n_binary[-i-1]) == 1:
-            x = (x * exp_counter) % m
-        exp_counter = (exp_counter ** 2) % m
+    current_power = base % modulo
+    while exponent != 0:
+        remainder = exponent % 2
+        exponent = exponent // 2
+        if remainder == 1:
+            x = (x * current_power) % modulo
+        current_power = (current_power ** 2) % modulo
     return x
 
 
