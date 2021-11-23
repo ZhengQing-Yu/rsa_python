@@ -24,5 +24,6 @@ def decode(string_b64):
 	return n
 
 
-for x in [random.randint(100000000000000000000, 1000000000000000000000000) for x in range(100000)]:
-	assert decode(encode(x)) == x
+if __name__ == '__main__':
+	for x in (random.randint(10000000000000000000000000000000, 100000000000000000000000000000000000) for x in range(999999)):
+		assert decode(encode(x)) == x
